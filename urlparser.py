@@ -22,7 +22,7 @@ class URL:
         self.scheme         = self.parsed.scheme
         self.username       = self.parsed.username
 
-    def _decodeB62(self, obj):
+    def _decodeB64(self, obj):
         return b64decode(obj).decode()
 
     def split_query(self):

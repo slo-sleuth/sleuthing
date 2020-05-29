@@ -7,7 +7,7 @@ class URL:
 
     def __init__(self, url):
         '''(str) -> URL
-        Create URL object from string.'''
+        Create URL object from string.  The object has attributes'''
 
         self.url = url
         self.parsed         = urlparse(url)
@@ -33,7 +33,7 @@ class URL:
         parsed = parse_qs(self.query)
         for key, value in parsed.items():
             try:
-                parsed[key] = self._decodeB62(value[0])
+                parsed[key] = self._decodeB64(value[0])
             except:
                 pass
         return parsed

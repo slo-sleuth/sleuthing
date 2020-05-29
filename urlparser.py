@@ -23,9 +23,13 @@ class URL:
         self.username       = self.parsed.username
 
     def _decodeB64(self, obj):
+        '''Returns decoded base64 obj.  Throws exception on error.'''
         return b64decode(obj).decode()
 
     def split_query(self):
+        '''Returns the split the query dictionary element, decoding any
+        detected base64 strings.  Does not attempt to correct poorly 
+        constructed base64 strings.'''
         parsed = parse_qs(self.query)
         for key, value in parsed.items():
             try:
@@ -35,6 +39,8 @@ class URL:
         return parsed
 
     def unquote(self, obj):
+        '''Returns the unquoted obj, tries to autodetect "%" quoting and "+" 
+        quoting.'''
         try: 
             obj = unquote(obj)
         except:
@@ -42,9 +48,11 @@ class URL:
         return unquote(obj)
 
     def __repr__(self):
+        '''Returns the URL string.'''
         return self.url
     
     def __len__(self):
+        '''Returns the URL length.'''
         return len(self.url)
 
 

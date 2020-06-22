@@ -1,4 +1,4 @@
-from urllib.parse import parse_qs, unquote, unquote_plus
+from urllib.parse import parse_qs, unquote, unquote_plus, urlparse
 from base64 import b64decode
 import sys
 import json

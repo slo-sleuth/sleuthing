@@ -1,13 +1,14 @@
-from urllib.parse import *
+from urllib.parse import parse_qs, unquote, unquote_plus
 from base64 import b64decode
 import sys
 import json
 
 class URL:
+    """Class to read a URL and parse its components."""
 
-    def __init__(self, url):
-        '''(str) -> URL
-        Create URL object from string.  The object has attributes'''
+    def __init__(self, url: str):
+        """Initialize URL object from url string and populate attributes from 
+        the url string components."""
 
         self.url = url
         self.parsed         = urlparse(url)
@@ -22,14 +23,14 @@ class URL:
         self.scheme         = self.parsed.scheme
         self.username       = self.parsed.username
 
-    def _decodeB64(self, obj):
-        '''Returns decoded base64 obj.  Throws exception on error.'''
+    def _decodeB64(self, obj: str):
+        """Returns a decoded base64 obj.  Throws an exception on error."""
         return b64decode(obj).decode()
 
     def split_query(self):
-        '''Returns the split the query dictionary element, decoding any
+        """Returns the split the query dictionary element, decoding any
         detected base64 strings.  Does not attempt to correct poorly 
-        constructed base64 strings.'''
+        constructed base64 strings."""
         parsed = parse_qs(self.query)
         for key, value in parsed.items():
             try:
@@ -38,9 +39,8 @@ class URL:
                 pass
         return parsed
 
-    def unquote(self, obj):
-        '''Returns the unquoted obj, tries to autodetect "%" quoting and "+" 
-        quoting.'''
+    def unquote(self, obj: str):
+        """Returns the unquoted obj string, tries to autodetect "%" quoting and "+" quoting."""
         try: 
             obj = unquote(obj)
         except:
@@ -48,17 +48,16 @@ class URL:
         return unquote(obj)
 
     def __repr__(self):
-        '''Returns the URL string.'''
-        return self.url
+        """Returns the URL string."""
+        return f"URL: {vars(self)}"
     
     def __len__(self):
-        '''Returns the URL length.'''
+        """Returns the URL length."""
         return len(self.url)
 
 
-def pprint_url(url):
-    '''(str) --> str
-    Pretty prints url components to command line.'''
+def pprint_url(url: str) -> None:
+    """Pretty prints url components to stdout."""
 
     u = URL(url)
 
@@ -86,7 +85,6 @@ def pprint_url(url):
 
     # loop through the query and print, unquoting special characters
     for key, value in u.split_query().items():
-        # print(type(value))
         if isinstance(value, list):
             value = ', '.join(i for i in value)
             print(f'  {key:23}: {value}')
@@ -106,3 +104,10 @@ def pprint_url(url):
         fragment = "None"
     print(f'{"Fragment":25}: {fragment}')
     return
+
+def main():
+    print(sys.argv[1])
+    pprint_url(sys.argv[1])
+
+if __name__ == "__main__":
+    main()
